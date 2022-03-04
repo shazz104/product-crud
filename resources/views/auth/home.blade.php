@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="card-header">
                     <h2>
-                        {{ __('Welcome') }} {{ request()->session()->get('user')->full_name }}
+                        {{ __('Welcome') }} {{ auth()->user()->full_name }}
                     </h2>
                 </div>
                 

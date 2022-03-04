@@ -45,14 +45,12 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $user = Auth::User();
-            Session::put('user', $user);
             return redirect()->intended('home');
         }
         return redirect('login')->with('error', 'Invalid credentials');
     }
 
     public function logout() {
-      Session::flush();
       Auth::logout();
       return redirect('login');
     }
@@ -64,7 +62,10 @@ class AuthController extends Controller
 
     public function verifyEmailMessage()
     {
-      return (Auth::check()) ?  redirect('/home') : view('auth.verify-email');
+      if (Auth::check() && (Auth::user()->email_verified_at != null)){
+        return view('auth.home');
+      }
+      return view('auth.verify-email');
     }
 
     public function verifyEmail(EmailVerificationRequest $request)
